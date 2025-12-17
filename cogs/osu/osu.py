@@ -126,28 +126,7 @@ class Osu(commands.Cog):
         # define option parser
         option_parser = OptionParser()
         option_parser.add_option('bancho',      'bancho',       opt_type=None, default=False)
-        option_parser.add_option('ripple',      'ripple',       opt_type=None, default=False)
-        option_parser.add_option('ripplerx',    'ripplerx',     opt_type=None, default=False)
-        option_parser.add_option('gatari',      'gatari',       opt_type=None, default=False)
-        option_parser.add_option('akatsuki',    'akatsuki',     opt_type=None, default=False)
-        option_parser.add_option('akatsukirx',  'akatsukirx',   opt_type=None, default=False)
-        option_parser.add_option('droid',       'droid',        opt_type=None, default=False)
-        option_parser.add_option('kawata',      'kawata',       opt_type=None, default=False)
-        option_parser.add_option('ainu',        'ainu',         opt_type=None, default=False)
-        option_parser.add_option('ainurx',      'ainurx',       opt_type=None, default=False)
-        option_parser.add_option('horizon',     'horizon',      opt_type=None, default=False)
-        option_parser.add_option('horizonrx',   'horizonrx',    opt_type=None, default=False)
-        option_parser.add_option('enjuu',       'enjuu',        opt_type=None, default=False)
-        option_parser.add_option('kurikku',     'kurikku',      opt_type=None, default=False)
-        option_parser.add_option('datenshi',    'datenshi',     opt_type=None, default=False)
-        option_parser.add_option('datenshirx',  'datenshirx',   opt_type=None, default=False)
-        option_parser.add_option('ezpp',        'ezppfarm',     opt_type=None, default=False)
-        option_parser.add_option('ezpprx',      'ezppfarmrx',   opt_type=None, default=False)
-        option_parser.add_option('ezppap',      'ezppfarmap',   opt_type=None, default=False)
-        option_parser.add_option('ezppv2',      'ezppfarmv2',   opt_type=None, default=False)
-        option_parser.add_option('rosu',        'realistik',    opt_type=None, default=False)
-        option_parser.add_option('rosurx',      'realistikrx',  opt_type=None, default=False)
-        option_parser.add_option('rosuap',      'realistikap',  opt_type=None, default=False)     
+        option_parser.add_option('inlayo',      'inlayo',       opt_type=None, default=False)
 
         outputs, options = option_parser.parse(inputs)
         return outputs, options
@@ -174,7 +153,7 @@ class Osu(commands.Cog):
             try:
                 user['bancho_user_id'] = user['osu_user_id']
                 user['bancho_username'] = user['osu_username']
-                user['default_server'] = 'bancho'
+                user['default_server'] = 'inlayo'
 
                 try:
                     del user['now_playing']
@@ -281,8 +260,8 @@ class Osu(commands.Cog):
         if db_user is not None and 'default_api' in db_user:
             return db_user['default_api']
 
-        # otherwise, assume it's bancho
-        return "bancho"
+        # otherwise, assume it's inlayo
+        return "inlayo"
 
     def remove_api_suffix(self, api_name):
         cleaned_api = api_name.replace('rx', '').replace('ap', '').replace('v2', '')
@@ -368,11 +347,11 @@ class Osu(commands.Cog):
         return True
 
 
-    async def create_new_user(self, user, osu_user, api='bancho'):
+    async def create_new_user(self, user, osu_user, api='inlayo'):
         newuser = {
             "discord_username": user.name,
             "default_gamemode": 0,
-            "default_api": 'bancho',
+            "default_api": 'inlayo',
             "user_id": str(user.id),
             "farm": 8,
             "skin": None,

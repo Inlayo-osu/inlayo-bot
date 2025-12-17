@@ -1,0 +1,50 @@
+{
+    "owner" : "YOUR_DISCORD_USERNAME",
+    "prefix" : [
+        "!"
+    ],
+    "shard_count": 1,
+    "bot_name": "YOUR_BOT_NAME",
+    "token" : "YOUR_DISCORD_BOT_TOKEN",
+    "client_id": "YOUR_CLIENT_ID",
+    "description": "An osu! Discord bot",
+    "API_KEYS": {
+        "WOLFRAM_API_KEY": "YOUR_WOLFRAM_API_KEY",
+        "YOUTUBE": "YOUR_YOUTUBE_API_KEY",
+        "OSU": {
+            "OFFICIAL": {
+                "KEY": "YOUR_OSU_API_KEY",
+                "CLIENT_ID": "YOUR_OSU_CLIENT_ID",
+                "CLIENT_SECRET": "YOUR_OSU_CLIENT_SECRET",
+                "USERNAME": "YOUR_OSU_USERNAME",
+                "PASSWORD": "YOUR_OSU_PASSWORD"
+            },
+            "BEATCONNECT": {
+                "KEY": "YOUR_BEATCONNECT_KEY"
+            }
+        },
+        "INLAYO": {
+            "BASE_URL": "https://inlayo.com",
+            "API_KEY": "YOUR_INLAYO_API_KEY"
+        },
+        "BANCHO": {
+            "USERNAME": "YOUR_BANCHO_USERNAME",
+            "PASSWORD": "YOUR_BANCHO_PASSWORD"
+        },
+        "PATREON": {
+            "CLIENT_ID": "YOUR_PATREON_CLIENT_ID",
+            "CLIENT_SECRET": "YOUR_PATREON_CLIENT_SECRET",
+            "ACCESS_TOKEN": "YOUR_PATREON_ACCESS_TOKEN",
+            "REFRESH_TOKEN": "YOUR_PATREON_REFRESH_TOKEN"
+        }
+    },
+    "settings":{
+        "production": true,
+        "osu": {
+            "cache" : true
+        }
+    },
+    "database": {
+        "primary": 27017
+    }
+}

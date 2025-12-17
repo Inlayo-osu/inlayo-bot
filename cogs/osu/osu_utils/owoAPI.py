@@ -39,40 +39,13 @@ class owoAPI(object):
         # owo Cache
         self.cache = owoCache(database)
 
-        # API list
+        # API list - inlayo.com only
         self.official_api = officialAPIv1(key=official_api_key)
         self.official_api_v2 = officialAPIv2(
             client_id=official_client_id, client_secret=official_client_secret)
-        self.ripple_api = rippleAPI() # rippleAPIpeppy()
-        self.ripplerx_api = ripplerxAPI()
-        self.gatari_api = gatariAPI()
-        self.akatsuki_api = akatsukiAPI() # akatsukiAPIpeppy()
-        self.akatsukirx_api = akatsukirxAPI()
-        self.droid_api = droidAPI(droid_api_key)
-        self.kawata_api = kawataAPI() # kawataAPIpeppy()
-        self.ainu_api = ainuAPI() # ainuAPIpeppy()
-        self.ainurx_api = ainurxAPI()
-        self.horizon_api = horizonAPI()# horizonAPIpeppy()
-        self.horizonrx_api = horizonrxAPI()
-        self.enjuu_api = enjuuAPI() # enjuuAPIpeppy()
-        self.kurikku_api = kurikkuAPI() # kurikkuAPIpeppy()
-        self.datenshi_api = datenshiAPI()# datenshiAPIpeppy()
-        self.datenshirx_api = datenshirxAPI()
-        self.ezppfarm_api = ezppfarmAPI()# ezppfarmAPIpeppy()
-        self.ezppfarmrx_api = ezppfarmrxAPI()
-        self.ezppfarmap_api = ezppfarmapAPI()
-        self.ezppfarmv2_api = ezppfarmv2API()
-        self.realistik_api = realistikAPI() # realistikAPIpeppy()
-        self.realistikrx_api = realistikrxAPI()
-        self.realistikap_api = realistikapAPI()
-
-        """
-        self.gatari_api = gatariAPI()
-        self.akatuski_api = akatsukiAPI()
-        self.ripple_api = rippleAPI()
-        self.kawata_api = kawataAPI()
-        self.aniu_api = aniuAPI()
-        self.droid_api = droidAPI()"""
+        
+        # Inlayo server API
+        self.inlayo_api = inlayoAPI()
 
         # other services
         self.beatconnect_api = BeatConnect(beatconnect_api_key)
@@ -134,22 +107,14 @@ class owoAPI(object):
             # print('get_beatmap cache not found.')
         
         # otherwise get from api
-        if api == "gatari":
-            # print('GATARI MAP')
-            beatmap_info = await self.gatari_api.get_beatmaps(
-                beatmap_id=beatmap_id)
-        elif api == "droid":
-            # print('DROID MAP')
-            beatmap_info = await self.ripple_api.get_beatmaps(
-                beatmap_id=beatmap_id)
-        elif since is not None:
+        if since is not None:
             beatmap_info = await self.official_api.get_beatmaps(since=since)     
-        elif 'bancho' not in api:
-            # print(api, ' MAP')
+        elif 'inlayo' in api.lower():
+            # Inlayo server
             server_api = self.get_api(api)
             beatmap_info = await server_api.get_beatmaps(
                 beatmap_id=beatmap_id)       
-        else: # official
+        else: # official bancho
             beatmap_info = await self.official_api_v2.get_beatmaps(
                 beatmap_id=beatmap_id, mods=mods)
 
@@ -1113,9 +1078,6 @@ class owoAPI(object):
     async def get_user_avatar(self, user_id, api_name):
         rand_int = random.randint(0, 1000)
         api = self.get_api(api_name)
-        if api_name == 'droid':
-            return await api.get_avatar(user_id)
-
         return api.avatar_url.format(user_id) + '?{}'.format(str(rand_int))
 
 
@@ -1133,53 +1095,9 @@ class owoAPI(object):
 
 
     def get_api(self, api_name):
-        # returns the api object
-        if 'ripplerx' in api_name.lower():
-            return self.ripplerx_api
-        elif 'akatsukirx' in api_name.lower():
-            return self.akatsukirx_api
-        elif 'ainurx' in api_name.lower():
-            return self.ainurx_api
-        elif 'horizonrx' in api_name.lower():
-            return self.horizonrx_api
-        elif 'datenshirx' in api_name.lower():
-            return self.datenshirx_api
-        elif 'ezppfarmrx' in api_name.lower():
-            return self.ezppfarmrx_api
-        elif 'ezppfarmap' in api_name.lower():
-            return self.ezppfarmap_api
-        elif 'ezppfarmv2' in api_name.lower():
-            return self.ezppfarmv2_api
-        elif 'realistikrx' in api_name.lower():
-            return self.realistikrx_api
-        elif 'realistikap' in api_name.lower():
-            return self.realistikap_api
-
-
-        elif 'gatari' in api_name.lower():
-            return self.gatari_api
-        elif 'ripple' in api_name.lower():
-            return self.ripple_api
-        elif 'akatsuki' in api_name.lower():
-            return self.akatsuki_api
-        elif 'kawata' in api_name.lower():
-            return self.kawata_api
-        elif 'ainu' in api_name.lower():
-            return self.ainu_api
-        elif 'droid' in api_name.lower():
-            return self.droid_api
-        elif 'horizon' in api_name.lower():
-            return self.horizon_api
-        elif 'enjuu' in api_name.lower():
-            return self.enjuu_api
-        elif 'kurikku' in api_name.lower():
-            return self.kurikku_api
-        elif 'datenshi' in api_name.lower():
-            return self.datenshi_api
-        elif 'ezppfarm' in api_name.lower():
-            return self.ezppfarm_api
-        elif 'realistik' in api_name.lower():
-            return self.realistik_api
+        # returns the api object - only inlayo.com or official bancho
+        if 'inlayo' in api_name.lower():
+            return self.inlayo_api
         elif 'official_v2' in api_name.lower():
             return self.official_api_v2
         elif 'bancho' in api_name.lower():
@@ -1191,16 +1109,7 @@ class owoAPI(object):
     def get_api_list(self):
         api_list = []
         api_list.append('bancho')
-        api_list.append('ripple')
-        api_list.append('akatsuki')
-        api_list.append('kawata')
-        api_list.append('ainu')
-        api_list.append('droid')
-        api_list.append('horizon')
-        api_list.append('enjuu')
-        api_list.append('kurikku')
-        api_list.append('datenshi')
-        api_list.append('ezppfarm')
+        api_list.append('inlayo')
 
         api_list = sorted(api_list)
 
@@ -1983,116 +1892,106 @@ class officialAPIv2(object):
             return "mania"
 
 
-class gatariAPI():
+class inlayoAPI(rippleAPI):
+    """
+    Inlayo.com API - based on bancho.py (similar to akatsuki)
+    API documentation: https://github.com/osuAkatsuki/bancho.py
+    """
     def __init__(self):
-        self.name = "Gatari"
-        self.base = 'https://api.gatari.pw/{}'
-        self.symbol_url = 'https://i.imgur.com/0mz9A4b.png'
-        self.user_url_base = 'https://osu.gatari.pw/u/{}'
-        self.avatar_url = 'https://a.gatari.pw/{}' # must be id
-        self.beatmap_download = 'https://osu.gatari.pw/d/{}?novideo'
-
-
-    async def get_beatmaps(self, beatmap_id=None):
-        uri_base = 'beatmaps/get?'
-        uri_builder = URIBuilder(uri_base)
-        uri_builder.add_parameter('bb', beatmap_id)
-        uri = self.base.format(uri_builder.uri)
-
-        resp = await fetch(uri)
-        resp = resp['data']
-        resp = key_cleanup(resp, self.key_mapping)
-        resp = self.fix_beatmap_keys(resp)
-        
-        return resp
-
-
-    def fix_beatmap_keys(self, resp):
-        modes = ['std','taiko','ctb','mania']
-        for beatmap in resp:
-            mode_txt = modes[int(beatmap['mode'])]
-            beatmap['difficulty_rating'] = beatmap[f'difficulty_{mode_txt}']
-
-            unix_time = int(beatmap['ranking_data'])
-            beatmap['approved'] = 1
-            beatmap['approved_date'] = datetime.datetime.utcfromtimestamp(
-                unix_time).strftime('%Y-%m-%d %H:%M:%S')
-
-        return resp
-
+        super().__init__()
+        self.name = "Inlayo"
+        self.base = 'https://inlayo.com/api/v1/{}'
+        self.symbol_url = 'https://inlayo.com/static/logos/logo.png'
+        self.user_url_base = 'https://inlayo.com/u/{}'
+        self.avatar_url = 'https://a.inlayo.com/{}'
+        self.beatmap_download = 'https://inlayo.com/d/{}?novideo'
+        self.websocket = None
 
     async def get_user(self, user_id, mode=0):
-        ret_json = []
-        uri_base = 'users/get?'
+        """Get user info from inlayo.com - uses bancho.py API structure"""
+        uri_base = 'users/full?'
         uri_builder = URIBuilder(uri_base)
-        uri_builder.add_parameter('u', user_id)
-        # uri_builder.add_parameter('mode', mode)
+        if str(user_id).isnumeric():
+            uri_builder.add_parameter('id', user_id)
+        else:
+            uri_builder.add_parameter('name', user_id)
         uri = self.base.format(uri_builder.uri)
 
         resp = await fetch(uri)
-        resp_user_get = resp['users']
+        
+        if resp.get('code') != 200:
+            return None
 
-        for user in resp_user_get:
-            # combine these two
-            uri_base = 'user/stats?'
-            uri_builder = URIBuilder(uri_base)
-            uri_builder.add_parameter('u', user['id'])
-            uri_builder.add_parameter('mode', mode)
-            uri = self.base.format(uri_builder.uri)
+        # bancho.py returns stats similar to ripple API structure
+        new_obj = {}
+        for obj_key in resp.keys():
+            if obj_key in ['std', 'taiko', 'ctb', 'mania']:
+                if obj_key == utils.num_to_mode(mode):
+                    mode_info = resp[obj_key]
+                    new_obj.update(mode_info)
+            else:
+                new_obj[obj_key] = resp[obj_key]
 
-            resp_stats = await fetch(uri)
-            resp_stats = resp_stats['stats']
-            resp_stats['level'] = resp_stats['level'] + \
-                resp_stats['level_progress']/100
-
-            user.update(resp_stats)
-
-            ret_json.append(user)
-
-        # print('Gatari USER', ret_json)
-
-        # clean up. key_cleanup expects a list.
-        ret_json = key_cleanup(ret_json, self.key_mapping,
-            command="get_user")
-
-        return ret_json
+        new_obj = [new_obj]
+        new_obj = key_cleanup(new_obj, self.key_mapping, command="get_user")
+        
+        return new_obj
 
 
-    async def get_user_recent(self, user_id, mode=0, page=None, length=None, include_fail=1, pp_filter=0):
-        user_info = await self.get_user(user_id, mode=0)
-        user_info = user_info[0]
-
-        uri_base = 'user/scores/recent?'
-        uri_builder = URIBuilder(uri_base)
-        uri_builder.add_parameter('id', user_info['user_id'])
-        uri_builder.add_parameter('mode', mode)
-        uri_builder.add_parameter('p', page)
-        uri_builder.add_parameter('l', length)
-        uri_builder.add_parameter('f', include_fail)
-        uri_builder.add_parameter('ppFilter', pp_filter)
-        uri = self.base.format(uri_builder.uri)
-
-        resp = await fetch(uri)
-        resp_fixed = []
-        for score in resp['scores']: # bring it into the first layer
-            score['beatmap_id'] = score['beatmap']['beatmap_id']
-
-            # deal with time
-            date_time_str = str(score['time']) # removes offset 2019-07-14T12:46:41+02:00
-            score['time'] = self.fix_date(date_time_str)
-
-        resp = resp['scores']
-        resp = key_cleanup(resp, self.key_mapping, 
-            command="get_user_recent")  # clean up
-        return resp
+# All other private server APIs removed - only inlayo.com is supported
 
 
-    async def get_user_best(self, user_id, mode=0, page=1, limit=100):
-        uri_base = 'user/scores/best?'
-        uri_builder = URIBuilder(uri_base)
-        uri_builder.add_parameter('id', user_id)
-        uri_builder.add_parameter('mode', mode)
-        uri_builder.add_parameter('p', page)
+class URIBuilder:
+    def __init__(self, base):
+        self.uri = base
+
+    def add_parameter(self, key, value):
+        if value is not None:
+            self.uri += '&' + str(key) + '=' + str(value)
+
+
+def key_cleanup(obj_list, key_mapping, command=None):
+    new_obj_list = []
+
+    for sub_obj in obj_list:
+        new_sub_obj = {}
+        for obj_key in sub_obj.keys():
+            new_key = key_mapping(obj_key, command=command)
+            if new_key:
+                new_sub_obj[new_key] = sub_obj[obj_key]
+            else:
+                new_sub_obj[obj_key] = sub_obj[obj_key]
+        new_obj_list.append(new_sub_obj)
+
+    return new_obj_list
+
+
+def value_cleanup(obj_list, key_name, value_mapping):
+    for idx, sub_obj in enumerate(obj_list):
+        obj_list[idx] = value_mapping(sub_obj, key_name)
+
+    return obj_list
+
+
+async def fetch(uri, session=None, timeout=20):
+    print(uri)
+    timeout = aiohttp.ClientTimeout(total=timeout)
+    if not session:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(uri, timeout=timeout) as resp:
+                try:
+                    api_resp = await resp.json()
+                except:
+                    api_resp = await resp.text()
+
+                return api_resp
+    else:
+        async with session.get(uri, timeout=timeout) as resp:
+            try:
+                api_resp = await resp.json()
+            except:
+                api_resp = await resp.text()
+            return api_resp
         uri_builder.add_parameter('l', limit)
         # uri_builder.add_parameter('mods', mods)
         uri = self.base.format(uri_builder.uri)
