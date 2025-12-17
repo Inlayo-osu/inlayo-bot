@@ -4,7 +4,10 @@ import copy
 import json
 import time
 import math
-import redis
+try:
+    import redis
+except ImportError:
+    redis = None
 import random
 import string
 import asyncio

@@ -14,11 +14,19 @@ import asyncio
 import logging
 import datetime
 import operator
-import websockets
+try:
+    import websockets
+    WEBSOCKETS_AVAILABLE = True
+except ImportError:
+    WEBSOCKETS_AVAILABLE = False
+    websockets = None
 import collections
 import numpy as np
 import motor.motor_asyncio
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 from utils.dataIO import fileIO
 
 from discord.ext import commands

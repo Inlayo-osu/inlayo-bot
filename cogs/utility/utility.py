@@ -15,7 +15,10 @@ import motor.motor_asyncio
 from discord.ext import commands
 from discord.utils import get
 from utils.dataIO import fileIO
-from googletrans import Translator
+try:
+    from googletrans import Translator
+except ImportError:
+    Translator = None
 from urllib.parse import quote_plus
 from utils.option_parser import OptionParser
 from utils.chat_formatting import escape_mass_mentions, italics, pagify

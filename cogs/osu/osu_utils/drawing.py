@@ -8,18 +8,34 @@ import zipfile
 import aiofiles
 import operator
 import datetime
-import pyttanko
+try:
+    import pyttanko
+except ImportError:
+    pyttanko = None
 import numpy as np
 from PIL import Image
-import scipy
-from scipy import cluster
-from bs4 import BeautifulSoup
+try:
+    import scipy
+    from scipy import cluster
+except ImportError:
+    scipy = None
+    cluster = None
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 
-import matplotlib as mpl
-mpl.use('Agg') # for non gui
-from matplotlib import ticker
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
+try:
+    import matplotlib as mpl
+    mpl.use('Agg') # for non gui
+    from matplotlib import ticker
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+except ImportError:
+    mpl = None
+    ticker = None
+    plt = None
+    mdates = None
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 from cogs.osu.osu_utils import map_utils, web_utils, utils, owoAPI

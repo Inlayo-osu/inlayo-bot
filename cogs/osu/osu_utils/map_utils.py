@@ -4,9 +4,15 @@ import math
 import random
 import aiohttp
 import asyncio
-import pyoppai
+try:
+    import pyoppai
+except ImportError:
+    pyoppai = None
 import discord
-import pyttanko
+try:
+    import pyttanko
+except ImportError:
+    pyttanko = None
 import statistics
 from PIL import Image, ImageEnhance, ImageFilter
 import matplotlib as mpl

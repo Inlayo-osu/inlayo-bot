@@ -4,7 +4,10 @@ import random
 import asyncio
 import datetime
 import collections
-from pymongo import MongoClient
+try:
+    from pymongo import MongoClient
+except ImportError:
+    MongoClient = None
 
 import discord
 from discord.utils import get

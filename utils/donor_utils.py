@@ -1,5 +1,6 @@
 class Patreon:
-    def __init__(self):
+    def __init__(self, api_key=None):
+        self.api_key = api_key
         self.patrons = []
     
     def is_patron(self, user_id):

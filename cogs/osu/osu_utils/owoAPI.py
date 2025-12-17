@@ -11,9 +11,15 @@ import aiohttp
 import asyncio
 import requests
 import datetime 
-import aiofiles
+try:
+    import aiofiles
+except ImportError:
+    aiofiles = None
 import operator
-import pyttanko
+try:
+    import pyttanko
+except ImportError:
+    pyttanko = None
 import pickle as pkl
 from PIL import Image
 from string import ascii_uppercase

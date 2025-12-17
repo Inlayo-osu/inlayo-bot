@@ -4,14 +4,32 @@ import urllib
 import random
 import aiohttp
 import asyncio
-import pyoppai
-import pyttanko
-import requests
+try:
+    import pyoppai
+except ImportError:
+    pyoppai = None
+try:
+    import pyttanko
+except ImportError:
+    pyttanko = None
+try:
+    import requests
+except ImportError:
+    requests = None
 import datetime
-import aiofiles
-from bs4 import BeautifulSoup
+try:
+    import aiofiles
+except ImportError:
+    aiofiles = None
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 
-import matplotlib as mpl
+try:
+    import matplotlib as mpl
+except ImportError:
+    mpl = None
 mpl.use('Agg') # for non gui
 from matplotlib import ticker
 import matplotlib.pyplot as plt
@@ -20,9 +38,14 @@ import matplotlib.dates as mdates
 from utils.dataIO import dataIO, fileIO
 from cogs.osu.osu_utils.chunks import chunks
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
-from oauth2client.tools import argparser
+try:
+    from apiclient.discovery import build
+    from apiclient.errors import HttpError
+    from oauth2client.tools import argparser
+except ImportError:
+    build = None
+    HttpError = None
+    argparser = None
 
 api_keys = fileIO("config.json", "load")["API_KEYS"]
 

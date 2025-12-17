@@ -22,7 +22,10 @@ import numpy as np
 from PIL import Image
 from threading import Thread
 from collections import deque
-from iso3166 import countries
+try:
+    from iso3166 import countries
+except ImportError:
+    countries = None
 
 import motor.motor_asyncio
 
@@ -33,7 +36,10 @@ from utils import checks
 from utils.dataIO import dataIO, fileIO
 from utils.option_parser import OptionParser
 from cogs.osu.beatmap_parser import beatmap_parser
-from cogs.osu.replay_parser.replay import parse_replay_file
+try:
+    from cogs.osu.replay_parser.replay import parse_replay_file
+except ImportError:
+    parse_replay_file = None
 from cogs.osu.osu_utils.owoAPI import owoAPI
 from cogs.osu.osu_utils import map_utils, utils, web_utils, drawing
 # import https://xkcd.com/353/

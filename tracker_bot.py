@@ -18,7 +18,11 @@ from io import TextIOWrapper
 from threading import Thread
 from utils.dataIO import fileIO
 
-import uvloop
+try:
+    import uvloop
+    UVLOOP_AVAILABLE = True
+except ImportError:
+    UVLOOP_AVAILABLE = False
 import motor.motor_asyncio
 
 import discord
@@ -122,5 +126,6 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     config = json.loads(open('config.json').read())
 
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+    if UVLOOP_AVAILABLE:
+        asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     start_bot(config)
