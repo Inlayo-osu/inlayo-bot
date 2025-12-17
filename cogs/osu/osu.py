@@ -11,12 +11,21 @@ import discord
 import aiohttp
 import asyncio
 import logging
-import pyttanko
+try:
+    import pyttanko
+except ImportError:
+    pyttanko = None
 import datetime
 import operator
-import requests
+try:
+    import requests
+except ImportError:
+    requests = None
 import importlib
-import pytesseract
+try:
+    import pytesseract
+except ImportError:
+    pytesseract = None
 import collections
 import numpy as np
 from PIL import Image
@@ -1536,7 +1545,7 @@ class Osu(commands.Cog):
                     current_rank, label, 
                     self._truncate_text(
                         discord_to_osu_mapping[single_user['user_id']]['discord_username'].replace(
-                            '`', '\`'), 10),
+                            '`', r'\`'), 10),
                     self._truncate_text(single_user['username'],10),
                     "{}".format(single_user['country']),
                     "#{}".format(global_rank), 
@@ -4280,8 +4289,8 @@ class Osu(commands.Cog):
             star_str = self._fix_star_arrow(star_str)
 
             title_txt = '**{}[{} [{}]{}]({}) +{}** [{}]\n'.format(
-                number_txt , beatmaps[i]['title'].replace('*','\*'),
-                beatmaps[i]['version'].replace('*','\*'), 
+                number_txt , beatmaps[i]['title'].replace('*',r'\*'),
+                beatmaps[i]['version'].replace('*',r'\*'), 
                 self._get_keys(beatmaps[i], gamemode, beatmaps[i]['version']),
                 beatmap_url, utils.fix_mods(''.join(mods_list)), star_str)
             info += title_txt
@@ -4443,8 +4452,8 @@ class Osu(commands.Cog):
                     int(plays[i]['enabled_mods']), gamemode)
 
             title_txt = '**{}[{} [{}]{}]({}) +{}** [{}★]\n'.format(
-                number_txt , beatmaps[i]['title'].replace('*','\*'),
-                beatmaps[i]['version'].replace('*','\*'), 
+                number_txt , beatmaps[i]['title'].replace('*',r'\*'),
+                beatmaps[i]['version'].replace('*',r'\*'), 
                 self._get_keys(beatmaps[i], gamemode, beatmaps[i]['version']),
                 beatmap_url, utils.fix_mods(''.join(mods_list)), star_str)
             info += title_txt
@@ -6140,9 +6149,9 @@ class Osu(commands.Cog):
 
     def find_osu_urls(self, msg):
         all_urls = []
-        get_urls = re.findall("((https|http):\/\/" \
-            "(osu|puu|gatari|akatsuki|ripple|kawata|ainu|horizon|dgsrz|enjuu|kurikku|troke|ez-pp)" \
-            "[^\s]+)([ ]\+[A-Za-z][^\s]+)?", msg)
+        get_urls = re.findall(r"((https|http)://" \
+            r"(osu|puu|gatari|akatsuki|ripple|kawata|ainu|horizon|dgsrz|enjuu|kurikku|troke|ez-pp)" \
+            r"[^\s]+)([ ]\+[A-Za-z][^\s]+)?", msg)
 
         for url, _, _, mods in get_urls:
             all_urls.append((url, mods))
@@ -6241,7 +6250,7 @@ class Osu(commands.Cog):
         youtube_key = self.api_keys["YOUTUBE"]
         search_results = await web_utils.youtube_search(url, youtube_key)
         # list of things to looks for
-        regex = "(\w+)\s?[:|-]\s?([^\s]+)\s" # finds key-value pairs
+        regex = r"(\w+)\s?[:|-]\s?([^\s]+)\s" # finds key-value pairs
 
         osu_user = None
         osu_skin = None
